@@ -1,0 +1,12 @@
+# dependências (o projeto não usa nenhuma, mas evita acidente)
+node_modules/
+
+# cache de coleta, que fica fora do projeto por padrão
+cache/
+tiles/
+*.log
+
+# sistema
+.DS_Store
+Thumbs.db
+desktop.ini

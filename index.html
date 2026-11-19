@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DrenaCity | Inteligência territorial para prevenção de alagamentos</title>
+<meta name="description" content="Plataforma que cruza dados públicos de clima, relevo, urbanização e drenagem para identificar onde o alagamento urbano é mais provável no Brasil.">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true">
+      <path d="M24 4C24 4 10 20 10 29a14 14 0 0 0 28 0C38 20 24 4 24 4Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M14 30h20M17 36h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" opacity=".75"/>
+      <circle cx="24" cy="27" r="3.4" fill="currentColor"/>
+    </svg>
+    <div class="brand-text">
+      <strong>Drena<span>City</span></strong>
+      <small>Inteligência territorial para prevenção de alagamentos</small>
+    </div>
+  </div>
+
+  <nav class="tabs" aria-label="Telas da plataforma">
+    <button class="tab" data-tela="mapa" aria-pressed="true">Mapa</button>
+    <button class="tab" data-tela="cidadao" aria-pressed="false">Painel do cidadão</button>
+    <button class="tab" data-tela="ficha" aria-pressed="false">Ficha de priorização</button>
+  </nav>
+
+  <div class="search" role="search">
+    <input id="search" type="search" autocomplete="off" spellcheck="false"
+           placeholder="Buscar município"
+           aria-label="Buscar município" aria-controls="search-results" aria-expanded="false">
+    <ul id="search-results" class="search-results" role="listbox" hidden></ul>
+  </div>
+
+  <button id="btn-metodologia" class="btn ghost" type="button">Metodologia e fontes</button>
+</header>
+
+<main class="layout" id="tela-mapa">
+  <aside class="panel" id="panel" aria-live="polite">
+    <nav class="crumbs" id="crumbs" aria-label="Navegação territorial"></nav>
+    <div id="panel-body"></div>
+  </aside>
+
+  <section class="map-wrap">
+    <div id="map" role="application" aria-label="Mapa do Brasil com risco de alagamento por território"></div>
+
+    <div class="map-toolbar">
+      <div class="seg" role="group" aria-label="Nível territorial">
+        <button class="seg-btn" data-nivel="estados" aria-pressed="true">Estados</button>
+        <button class="seg-btn" data-nivel="municipios" aria-pressed="false">Municípios</button>
+        <button class="seg-btn" data-nivel="bairros" aria-pressed="false">Bairros</button>
+        <button class="seg-btn" data-nivel="ruas" aria-pressed="false">Ruas</button>
+      </div>
+      <label class="chip chip-select">
+        <span>Indicador</span>
+        <select id="metric" aria-label="Indicador exibido no mapa">
+          <option value="indice">Índice de risco de alagamento</option>
+          <option value="hidrologica">Exposição hidrológica</option>
+          <option value="impermeabilizacao">Adensamento urbano</option>
+          <option value="infraestrutura">Déficit de drenagem</option>
+          <option value="relevo">Relevo e altimetria</option>
+          <option value="vulnerabilidade">Vulnerabilidade social</option>
+          <option value="historico">Histórico de enchentes</option>
+          <option value="chuva_anual_mm">Precipitação anual (mm)</option>
+          <option value="chuva_max24h_mm">Chuva máxima em 24h (mm)</option>
+          <option value="dias_chuva_forte">Dias de chuva forte por ano</option>
+          <option value="altitude_m">Altitude (m)</option>
+          <option value="dens_urbana">Densidade na área urbanizada</option>
+          <option value="pct_favelas">População em favelas (%)</option>
+          <option value="pop_urbana">População urbana</option>
+        </select>
+      </label>
+      <div class="seg" role="group" aria-label="Modo de cor">
+        <button class="seg-btn" data-cores="degrade" aria-pressed="true">Degradê</button>
+        <button class="seg-btn" data-cores="classes" aria-pressed="false">Classes</button>
+      </div>
+      <button class="chip" id="btn-calor" type="button" aria-pressed="false">Mapa de calor</button>
+      <label class="chip chip-range">
+        <span>Risco mínimo <b id="thr-val">0</b></span>
+        <input id="thr" type="range" min="0" max="80" step="5" value="0" aria-label="Filtrar por risco mínimo">
+      </label>
+    </div>
+
+    <div class="legend" id="legend"></div>
+    <div class="map-note" id="map-note"></div>
+  </section>
+</main>
+
+<section class="tela" id="tela-cidadao" hidden></section>
+<section class="tela" id="tela-ficha" hidden></section>
+
+<div class="modal" id="modal" hidden>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <button class="modal-close" id="modal-close" type="button" aria-label="Fechar">&times;</button>
+    <h2 id="modal-title">Metodologia, fontes e uso responsável dos dados</h2>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.heat/0.2.0/leaflet-heat.js"></script>
+<script src="data/indicadores.js"></script>
+<script src="data/geo-estados.js"></script>
+<script src="data/geo-municipios.js"></script>
+<script src="data/bairros.js"></script>
+<script src="data/relevo.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>

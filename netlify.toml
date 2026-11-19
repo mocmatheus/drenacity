@@ -1,0 +1,14 @@
+# DrenaCity: site estático, sem etapa de build.
+# A Netlify publica a raiz do repositório como está.
+
+[build]
+  publish = "."
+  command = ""
+
+# Páginas internas não existem: tudo é servido pelo index.html na raiz.
+# Caso um link quebrado seja acessado, volta para a página principal.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = false
